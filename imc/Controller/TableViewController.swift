@@ -6,11 +6,21 @@
 //
 
 import UIKit
+import CoreData
 
 class TableViewController: UITableViewController {
+    
+    var listIMC: [Imc] = []
+    var context : NSManagedObjectContext!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        
+        navigationItem.title = "IMC"
+        
+        fetchIMC()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -18,27 +28,49 @@ class TableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    
+    func fetchIMC(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let fetchRequest: NSFetchRequest<Imc> = Imc.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        
+        do {
+            listIMC = try context.fetch(fetchRequest)
+            tableView.reloadData()
+        } catch let error as NSError {
+            print("Erro ao buscar dados: \(error.userInfo)")
+        }
+    }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return listIMC.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        
+        let formater = DateFormatter()
+        formater.dateStyle = .short
+        formater.timeStyle = .short
+        
+        let imc = listIMC[indexPath.row]
+        cell.textLabel?.text = """
+        \(imc.weight) kg / \(imc.height) m
+        \(formater.string(from: imc.timestamp ?? Date()))
+        """
         return cell
     }
+
     
 
     
