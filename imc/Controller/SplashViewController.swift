@@ -27,7 +27,7 @@ class SplashViewController: UIViewController {
     
     /// Configura a interface do usuário, adicionando e posicionando a logo.
     private func setupUI() {
-        view.backgroundColor = .systemPurple // Define a cor de fundo da tela
+        view.backgroundColor = .cyan // Define a cor de fundo da tela
         
         // Adiciona a imagem ao layout da ViewController
         view.addSubview(logoImageView)

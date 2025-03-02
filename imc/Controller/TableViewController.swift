@@ -12,26 +12,33 @@ class TableViewController: UITableViewController {
     
     var listIMC: [Imc] = []
     var context : NSManagedObjectContext!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
+        tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
+        
         navigationItem.title = "IMC"
         
+        // Inicializa o contexto Core Data corretamente
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            fatalError("Erro ao acessar AppDelegate")
+        }
+        context = appDelegate.persistentContainer.viewContext
+        
         fetchIMC()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     
     func fetchIMC(){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let fetchRequest: NSFetchRequest<Imc> = Imc.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
         
@@ -42,37 +49,29 @@ class TableViewController: UITableViewController {
             print("Erro ao buscar dados: \(error.userInfo)")
         }
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return listIMC.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-        
-        let formater = DateFormatter()
-        formater.dateStyle = .short
-        formater.timeStyle = .short
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         let imc = listIMC[indexPath.row]
-        cell.textLabel?.text = """
-        \(imc.weight) kg / \(imc.height) m
-        \(formater.string(from: imc.timestamp ?? Date()))
-        """
+        cell.configure(with: imc)
         return cell
     }
-
     
-
+    
+    
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -80,42 +79,54 @@ class TableViewController: UITableViewController {
         return true
     }
     
-
+    
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            let imcToDelete = listIMC[indexPath.row]
+            
+            // Remove do Core Data
+            context.delete(imcToDelete)
+            
+            // Remove da lista antes de salvar
+            listIMC.remove(at: indexPath.row)
+            
+            do {
+                try context.save() // Salva a remoção no banco de dados
+                tableView.deleteRows(at: [indexPath], with: .fade) // Anima a remoção da célula
+            } catch let error as NSError {
+                print("Erro ao salvar: \(error), \(error.userInfo)")
+            }
+        }
     }
     
-
+    
+    
+    
     /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

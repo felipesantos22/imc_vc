@@ -7,17 +7,55 @@
 
 import UIKit
 
+import UIKit
+
 class TableViewCell: UITableViewCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    
+    // Criando labels para exibir os dados
+    let weightHeightLabel = UILabel()
+    let dateLabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        backgroundColor = .white
+        
+        // Configurando o rótulo de peso e altura
+        weightHeightLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        weightHeightLabel.textColor = .black
+        weightHeightLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Configurando o rótulo da data
+        dateLabel.font = UIFont.systemFont(ofSize: 14)
+        dateLabel.textColor = .gray
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Adicionando os rótulos à célula
+        contentView.addSubview(weightHeightLabel)
+        contentView.addSubview(dateLabel)
+        
+        // Definindo constraints para alinhamento correto
+        NSLayoutConstraint.activate([
+            weightHeightLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            weightHeightLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            
+            dateLabel.leadingAnchor.constraint(equalTo: weightHeightLabel.leadingAnchor),
+            dateLabel.topAnchor.constraint(equalTo: weightHeightLabel.bottomAnchor, constant: 4),
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+        ])
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // Método para configurar os dados da célula
+    func configure(with imc: Imc) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        
+        weightHeightLabel.text = "\(imc.weight) kg / \(imc.height) m = \(imc.result)"
+        dateLabel.text = formatter.string(from: imc.timestamp ?? Date())
+    }
 }
