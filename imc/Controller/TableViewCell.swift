@@ -20,6 +20,11 @@ class TableViewCell: UITableViewCell {
         
         backgroundColor = .white
         
+        cellFormater()
+    }
+    
+    
+    func cellFormater() {
         // Configurando o rótulo de peso e altura
         weightHeightLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         weightHeightLabel.textColor = .black

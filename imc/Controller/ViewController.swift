@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
     
     var context: NSManagedObjectContext!
     
@@ -29,6 +29,9 @@ class ViewController: UIViewController {
         inputHeight()    // Campo de entrada para a altura
         buttonCalc()     // Botão para calcular o IMC
         createButton()   // Botão para navegar entre telas
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dimissKeyboard))
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     // Função para adicionar a imagem do logo na tela
@@ -116,8 +119,9 @@ class ViewController: UIViewController {
     @objc func calculateIMC() {
         // Obtém o peso e a altura dos campos de texto
         guard let weight = Double(textWeight.text ?? ""), let height = Double(textHeight.text ?? "") else {
+            
             // Lidar com erro se os valores não forem válidos
-            print("Peso ou altura inválidos")
+            showAlert(title: "Alerta", message: "Campo peso ou altura não preenchido ou inválido.")
             return
         }
         
@@ -188,6 +192,10 @@ class ViewController: UIViewController {
             button.widthAnchor.constraint(equalToConstant: 200),
             button.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    @objc func dimissKeyboard() {
+        view.endEditing(true)
     }
 
 }
