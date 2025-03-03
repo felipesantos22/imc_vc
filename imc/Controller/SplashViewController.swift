@@ -27,7 +27,7 @@ class SplashViewController: UIViewController {
     
     /// Configura a interface do usuário, adicionando e posicionando a logo.
     private func setupUI() {
-        view.backgroundColor = .cyan // Define a cor de fundo da tela
+        view.backgroundColor = .darkGray // Define a cor de fundo da tela
         
         // Adiciona a imagem ao layout da ViewController
         view.addSubview(logoImageView)
@@ -42,7 +42,7 @@ class SplashViewController: UIViewController {
     }
     
     private func navigateToMainScreen() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // Aguarda 2 segundos
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { // Aguarda 2 segundos
             
             // Obtém a referência da SceneDelegate
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
@@ -55,6 +55,4 @@ class SplashViewController: UIViewController {
             }
         }
     }
-    
-    
 }

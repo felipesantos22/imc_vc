@@ -30,6 +30,7 @@ class ViewController: UIViewController{
         buttonCalc()     // Botão para calcular o IMC
         createButton()   // Botão para navegar entre telas
         
+        // Configura o método para fazer o teclado sumir ao clicar na tela
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dimissKeyboard))
         view.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -48,7 +49,7 @@ class ViewController: UIViewController{
             imageView.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
-
+    
     // Função para adicionar o campo de entrada do peso na tela
     func inputWeight() {
         textWeight = UITextField()
@@ -118,7 +119,8 @@ class ViewController: UIViewController{
     // Função chamada ao pressionar o botão "Calcular"
     @objc func calculateIMC() {
         // Obtém o peso e a altura dos campos de texto
-        guard let weight = Double(textWeight.text ?? ""), let height = Double(textHeight.text ?? "") else {
+        guard let weight = Double((textWeight.text ?? "").replacingOccurrences(of: ",", with: ".")),
+              let height = Double((textHeight.text ?? "").replacingOccurrences(of: ",", with: ".")) else {
             
             // Lidar com erro se os valores não forem válidos
             showAlert(title: "Alerta", message: "Campo peso ou altura não preenchido ou inválido.")
@@ -134,6 +136,7 @@ class ViewController: UIViewController{
         // Exibe o resultado na tela
         result(imc: imc)
     }
+    
     
     // Função para salvar os dados de IMC no Core Data
     func saveResult(weight: Double, height: Double, result: Double) {
@@ -177,7 +180,7 @@ class ViewController: UIViewController{
         let nextVC = TableViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
-
+    
     func createButton() {
         let button = UIButton(type: .system)
         button.setTitle("Histórico", for: .normal)
@@ -197,6 +200,6 @@ class ViewController: UIViewController{
     @objc func dimissKeyboard() {
         view.endEditing(true)
     }
-
+    
 }
 

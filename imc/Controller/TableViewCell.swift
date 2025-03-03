@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 class TableViewCell: UITableViewCell {
     
     // Criando labels para exibir os dados
@@ -60,7 +58,7 @@ class TableViewCell: UITableViewCell {
         formatter.dateStyle = .short
         formatter.timeStyle = .short
         
-        weightHeightLabel.text = "\(imc.weight) kg / \(imc.height) m = \(imc.result)"
+        weightHeightLabel.text = "Resultado: \(String(format: "%.2f", imc.result))"
         dateLabel.text = formatter.string(from: imc.timestamp ?? Date())
     }
 }
