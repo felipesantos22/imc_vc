@@ -18,18 +18,16 @@ class SplashViewController: UIViewController {
         return imageView
     }()
     
-    /// Método chamado quando a tela é carregada.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI() // Configura os elementos visuais
-        navigateToMainScreen() // Aguarda um tempo e troca de tela
+        view.backgroundColor = UIColor(named:"splashcolor")
+        setupUI()
+        navigateToMainScreen()
     }
     
     /// Configura a interface do usuário, adicionando e posicionando a logo.
     private func setupUI() {
-        view.backgroundColor = .darkGray // Define a cor de fundo da tela
-        
-        // Adiciona a imagem ao layout da ViewController
         view.addSubview(logoImageView)
         
         // Configura as constraints para centralizar a logo na tela

@@ -15,14 +15,16 @@ class TableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .white
+
+        // Define a cor no contentView
+        contentView.backgroundColor = UIColor(named: "splashcolor")
         
         cellFormater()
     }
     
     
     func cellFormater() {
+        
         // Configurando o rótulo de peso e altura
         weightHeightLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         weightHeightLabel.textColor = .black
@@ -57,7 +59,6 @@ class TableViewCell: UITableViewCell {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .short
-        
         weightHeightLabel.text = "Resultado: \(String(format: "%.2f", imc.result))"
         dateLabel.text = formatter.string(from: imc.timestamp ?? Date())
     }

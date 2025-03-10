@@ -16,11 +16,19 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        
+        // Define a cor no backgroundView (caso o contentView não cubra tudo)
+        /*let bgView = UIView()
+        bgView.backgroundColor = UIColor(named: "splashcolor")
+        backgroundView = bgView*/
+        
+        view.backgroundColor = UIColor(named: "splashcolor")
         
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
         
         navigationItem.title = "IMC"
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
         // Inicializa o contexto Core Data corretamente
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
