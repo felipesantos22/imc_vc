@@ -16,17 +16,13 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        // Define a cor no backgroundView (caso o contentView não cubra tudo)
-        /*let bgView = UIView()
-        bgView.backgroundColor = UIColor(named: "splashcolor")
-        backgroundView = bgView*/
-        
         view.backgroundColor = UIColor(named: "splashcolor")
         
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
         
         navigationItem.title = "IMC"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
@@ -39,10 +35,10 @@ class TableViewController: UITableViewController {
         fetchIMC()
         
         // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     
